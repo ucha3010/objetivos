@@ -1,5 +1,6 @@
 package com.damian.objetivos.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import com.damian.objetivos.util.ViewConstant;
 public class LoginController {
 	
 	@GetMapping("/login")
+	@PreAuthorize("PermitAll()")
 	public String showLoginForm(Model model,
 			@RequestParam(name = "error", required = false) String error,
 			@RequestParam(name = "logout", required = false) String logout) {
