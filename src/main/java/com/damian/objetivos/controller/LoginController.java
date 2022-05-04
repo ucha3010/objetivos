@@ -14,7 +14,7 @@ import com.damian.objetivos.util.ViewConstant;
 public class LoginController {
 	
 	@GetMapping("/login")
-	@PreAuthorize("PermitAll()")
+	@PreAuthorize("permitAll()")
 	public String showLoginForm(Model model,
 			@RequestParam(name = "error", required = false) String error,
 			@RequestParam(name = "logout", required = false) String logout) {
@@ -23,9 +23,9 @@ public class LoginController {
 		return ViewConstant.LOGIN;
 	}
 	
-	@GetMapping({"/loginsuccess", "/"})
+	@GetMapping("/loginsuccess")
 	public String loginCheck() {
-		return "redirect:/contacts/showContacts";
+		return "redirect:/entrada/listaEntradas";
 	}
 
 }

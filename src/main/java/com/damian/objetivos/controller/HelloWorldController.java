@@ -29,6 +29,11 @@ public class HelloWorldController {
 	@Autowired
 	private ExampleService exampleService;
 	
+	@GetMapping("/")
+	public String index(Model model) {
+		return "index";
+	}
+	
 	@GetMapping("/HelloWorld")
 	public String helloWorldController(Model model) {
 		model.addAttribute("person", new Person("Pepe", 23));
