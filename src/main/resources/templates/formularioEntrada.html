@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+
+<title>Formulario entrada</title>
+</head>
+<body>
+	<form action="#" th:action="@{/entrada/agregarEntrada}" th:object="${entrada}" method="post">
+	
+		<input type="hidden" name="subcategoria.id" th:value="${subcategoriaId}"/>
+	
+		<label for="fecha-entrada">Fecha entrada:</label>
+		<input type="date" th:field="*{fecha}" id="fecha-entrada"/>
+
+	    <label for="detalle">Detalle:</label>
+	    <textarea rows="5" id="detalle" type="text" required="true" th:field="*{detalle}"/>
+    
+		<p><input type="submit" value="Enviar"/></p>
+		
+	</form>
+</body>
+</html>

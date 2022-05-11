@@ -14,4 +14,6 @@ public interface EntradaService {
 	
 	public abstract List<EntradaModel> listBySubcategoria(int idSubcategoria);
 
+	public abstract EntradaModel fillCategoriaId(EntradaModel entrada);
+
 }

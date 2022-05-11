@@ -17,6 +17,7 @@
 </head>
 <body>
 	<div class="container">
+		<h1>¡Hola <span th:text="${username}"></span>!</h1>
 		<nav class="navbar navbar-default" role="navigation">
 			<a class="navbar-brand" href="#" th:href="@{/entrada/listaEntradas}">Resumen</a>
 			<form th:action="@{/logout}" method="POST">
@@ -53,10 +54,6 @@
 
 		
 		
-		
-			<form th:action="@{/logout}" method="POST">
-				<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</button>
-			</form>
 
 	</div>
 

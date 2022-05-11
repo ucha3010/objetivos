@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.damian.objetivos.converter.EntradaConverter;
 import com.damian.objetivos.entity.Entrada;
+import com.damian.objetivos.entity.Subcategoria;
+import com.damian.objetivos.model.CategoriaModel;
 import com.damian.objetivos.model.EntradaModel;
 import com.damian.objetivos.repository.EntradaJpaRepository;
+import com.damian.objetivos.repository.SubcategoriaJpaRepository;
 import com.damian.objetivos.service.EntradaService;
 
 @Service()
@@ -20,6 +23,9 @@ public class EntradaServiceImpl implements EntradaService{
 	
 	@Autowired
 	private EntradaConverter entradaConverter;
+	
+	@Autowired
+	private SubcategoriaJpaRepository subcategoriaJpaRepository;
 	
 
 	@Override
@@ -49,6 +55,15 @@ public class EntradaServiceImpl implements EntradaService{
 			entradaModelList.add(entradaConverter.entity2Model(entrada));
 		}
 		return entradaModelList;		
+	}
+
+	@Override
+	public EntradaModel fillCategoriaId(EntradaModel entrada) {
+		Subcategoria subcategoria = subcategoriaJpaRepository.findById(entrada.getSubcategoria().getId());
+		CategoriaModel categoria = new CategoriaModel();
+		categoria.setId(subcategoria.getIdCategoria());
+		entrada.setCategoria(categoria);
+		return entrada;
 	}
 
 }

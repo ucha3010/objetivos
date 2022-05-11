@@ -2,9 +2,13 @@ package com.damian.objetivos.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class EntradaModel {
 
 	private int id;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha;
 	private String detalle;
 	private CategoriaModel categoria;

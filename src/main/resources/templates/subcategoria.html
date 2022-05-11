@@ -17,8 +17,12 @@
 </head>
 <body>
 	<div class="container">
+		<h1>¡Hola <span th:text="${username}"></span>!</h1>
 		<nav class="navbar navbar-default" role="navigation">
 			<a class="navbar-brand" href="#" th:href="@{/entrada/listaEntradas}">Resumen</a>
+			<form th:action="@{/logout}" method="POST">
+				<button class="btn btn-primary pull-right" type="submit"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Salir</button>
+			</form>
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 			
 				<ul th:each="categoria : ${categorias}" class="nav navbar-nav">
@@ -34,7 +38,8 @@
 					</li>
 				</ul>
 			</div>
-		</nav>		
+		</nav>	
+		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" href="#" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__}" role="button">Agregar entrada</a>	
 		
 		<h3><span th:text="${subcategoriaElegida.descripcion}"></span></h3>
 		
