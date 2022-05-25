@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.damian.objetivos.model.EntradaModel;
 import com.damian.objetivos.model.SubcategoriaModel;
+import com.damian.objetivos.repository.UserRepository;
 import com.damian.objetivos.service.CategoriaService;
 import com.damian.objetivos.service.EntradaService;
 import com.damian.objetivos.service.SubcategoriaService;
@@ -32,16 +33,17 @@ public class EntradaController {
 	@Autowired
 	private SubcategoriaService subcategoriaService;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	@GetMapping("/listaEntradas")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ModelAndView listaEntradas() {
 		ModelAndView modelAndView = new ModelAndView("resumen");
 		modelAndView.addObject("entradas", entradaService.listAll());
 		modelAndView.addObject("categorias", categoriaService.listAll());
+		cargarUsuario(modelAndView);
 		LoggerMapper.log(Level.INFO, "listaEntradas", modelAndView, getClass());
-		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		modelAndView.addObject("username", user.getUsername());
 		return modelAndView;
 	}
 	
@@ -54,6 +56,9 @@ public class EntradaController {
 		EntradaModel entrada = new EntradaModel();
 		entrada.setSubcategoria(subcategoria);
 		modelAndView.addObject("entrada", entrada);
+		modelAndView.addObject("categorias", categoriaService.listAll());
+		modelAndView.addObject("subcategoriaElegida", subcategoriaService.findById(idSubcategoria));
+		cargarUsuario(modelAndView);
 		LoggerMapper.log(Level.INFO, "formularioEntrada", modelAndView, getClass());
 		return modelAndView;
 	}
@@ -74,11 +79,16 @@ public class EntradaController {
 		modelAndView.addObject("entradas", entradaService.listBySubcategoria(idSubcategoria));
 		modelAndView.addObject("categorias", categoriaService.listAll());
 		modelAndView.addObject("subcategoriaElegida", subcategoriaService.findById(idSubcategoria));
+		cargarUsuario(modelAndView);
 		LoggerMapper.log(Level.INFO, "entradasSubcategoria", modelAndView, getClass());
-		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		modelAndView.addObject("username", user.getUsername());
 		return modelAndView;
+	}
+	
+	private void cargarUsuario(ModelAndView modelAndView) {		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(user.getUsername());
+		modelAndView.addObject("username", usuario.getName());
+		
 	}
 
 }

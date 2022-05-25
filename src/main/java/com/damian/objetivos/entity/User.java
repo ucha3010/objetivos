@@ -24,6 +24,15 @@ public class User {
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled;
 	
+	@Column(name = "name", nullable = false, length = 60)
+	private String name;
+	
+	@Column(name = "lastname", nullable = false, length = 60)
+	private String lastname;
+	
+	@Column(name = "secondLastname", nullable = true, length = 60)
+	private String secondLastname;
+	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<UserRole> userRole = new HashSet<>();
 	
@@ -102,15 +111,55 @@ public class User {
 		this.userRole = userRole;
 	}
 
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the lastname
+	 */
+	public String getLastname() {
+		return lastname;
+	}
+
+	/**
+	 * @param lastname the lastname to set
+	 */
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	/**
+	 * @return the secondLastname
+	 */
+	public String getSecondLastname() {
+		return secondLastname;
+	}
+
+	/**
+	 * @param secondLastname the secondLastname to set
+	 */
+	public void setSecondLastname(String secondLastname) {
+		this.secondLastname = secondLastname;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", enabled=" + enabled + ", userRole="
-				+ userRole + "]";
+		return "User [username=" + username + ", password=" + password + ", enabled=" + enabled + ", name=" + name
+				+ ", lastname=" + lastname + ", secondLastname=" + secondLastname + ", userRole=" + userRole + "]";
 	}
-	
-	
 
 }

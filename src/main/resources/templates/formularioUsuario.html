@@ -17,7 +17,7 @@
 	<script type="text/javascript">
 		function validar(){
 
-			var campo = ['fecha-entrada','detalle'];
+			var campo = ['name','lastname'];
 			restablecer();
 			var validado = true;			
 			for(var i=0; i < campo.length; i++){
@@ -52,8 +52,7 @@
 <body>
 	<div class="container">
 		<h1>
-			¡Hola <span th:text="${username}"></span>! 
-			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+			¡Hola <span th:text="${usuario.username}"></span>!
 		</h1>
 		<nav class="navbar navbar-default" role="navigation">
 			<a class="navbar-brand" href="#" th:href="@{/entrada/listaEntradas}">Resumen</a>
@@ -75,38 +74,49 @@
 					</li>
 				</ul>
 			</div>
-		</nav>	
+		</nav>
 		
-		<h3><span th:text="${subcategoriaElegida.descripcion}"></span></h3>
+		<form action="#" th:action="@{/usuario/actualizarUsuario}" th:object="${usuario}" method="post" onsubmit="return validar()">
 		
-		<form action="#" th:action="@{/entrada/agregarEntrada}" th:object="${entrada}" method="post" onsubmit="return validar()">
-		
-			<input type="hidden" name="subcategoria.id" th:value="${subcategoriaId}"/>
-		
+			<input type="hidden" name="username" th:value="${usuario.username}"/>
+			<input type="hidden" name="password" th:value="${usuario.password}"/>
+			<input type="hidden" name="enabled" th:value="${usuario.enabled}"/>
+
 			<div class="row">
 			    <div class="col-xs-6 mb-3">
-					<label for="fecha-entrada">Fecha entrada:</label>
-					<input type="date" th:field="*{fecha}" id="fecha-entrada" class="form-control" placeholder="Fecha entrada"/>
-					<span id="fecha-entradaError" name="errorSpan"></span>
+					<label for="name">Nombre:</label>
+					<input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Nombre"/>
+					<span id="nameError" name="errorSpan"></span>
 				</div>
 				
 			    <div class="col-xs-6 mb-3">
 			    </div>
 			</div>
-	
-		
+
 			<div class="row">
-			    <div class="col-xs-8 mb-3">
-				    <label for="detalle">Detalle:</label>
-				    <textarea rows="5" id="detalle" type="text" th:field="*{detalle}" class="form-control"></textarea>
-					<span id="detalleError" name="errorSpan"></span>
-   				</div>
-   				
-			    <div class="col-xs-4 mb-3">
-			    </div>
+				<div class="col-xs-6 mb-3">
+					<label for="lastname">Primer apellido:</label>
+					<input type="text" th:field="*{lastname}" id="lastname" class="form-control" placeholder="Primer apellido"/>
+					<span id="lastnameError" name="errorSpan"></span>
+				</div>
+
+				<div class="col-xs-6 mb-3">
+				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-xs-6 mb-3">
+					<label for="secondLastname">Segundo apellido:</label>
+					<input type="text" th:field="*{secondLastname}" id="secondLastname" class="form-control" placeholder="Segundo apellido"/>
+					<span id="secondLastnameError" name="errorSpan"></span>
+				</div>
+
+				<div class="col-xs-6 mb-3">
+				</div>
+			</div>
+
 			
-		    <button class="btn btn-primary" type="submit">Enviar</button>
+		    <button class="btn btn-primary" type="submit">Actualizar</button>
 		    <span id="hayError" name="errorSpan" style="color:red"></span>
 			
 		</form>

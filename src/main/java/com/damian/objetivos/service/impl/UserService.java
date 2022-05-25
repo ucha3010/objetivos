@@ -29,6 +29,10 @@ public class UserService implements UserDetailsService {
 		List<GrantedAuthority> authorities = buildAuthorities(user.getUserRole());
 		return buildUser(user, authorities);
 	}
+
+	public com.damian.objetivos.entity.User addOrUpdate(com.damian.objetivos.entity.User usuario) {
+		return userRepository.save(usuario);
+	}
 	
 	private User buildUser(com.damian.objetivos.entity.User user, List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), user.isEnabled(),

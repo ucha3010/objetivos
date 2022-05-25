@@ -17,7 +17,10 @@
 </head>
 <body>
 	<div class="container">
-		<h1>¡Hola <span th:text="${username}"></span>!</h1>
+		<h1>
+			¡Hola <span th:text="${username}"></span>! 
+			<a href="#" th:href="@{/usuario/formularioUsuario}"><span class="glyphicon glyphicon-user"></span></a>
+		</h1>
 		<nav class="navbar navbar-default" role="navigation">
 			<a class="navbar-brand" href="#" th:href="@{/entrada/listaEntradas}">Resumen</a>
 			<form th:action="@{/logout}" method="POST">
