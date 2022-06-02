@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.damian.objetivos.entity.UserRole;
@@ -32,6 +33,16 @@ public class UserService implements UserDetailsService {
 
 	public com.damian.objetivos.entity.User addOrUpdate(com.damian.objetivos.entity.User usuario) {
 		return userRepository.save(usuario);
+	}
+
+	public boolean comparePassword(String newPass, String oldPass) {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder.matches(newPass, oldPass);
+	}
+
+	public String generatePassword(String newPass) {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder.encode(newPass);
 	}
 	
 	private User buildUser(com.damian.objetivos.entity.User user, List<GrantedAuthority> authorities) {

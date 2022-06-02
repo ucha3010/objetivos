@@ -12,14 +12,14 @@
 	
 	<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
 	
-	<title>Formulario entrada</title>
-	
+	<title>Cambiar contraseña</title>
+
 	<script type="text/javascript">
 		function validar(){
 
-			var campo = ['name','lastname'];
+			var campo = ['antiguaClave','nuevaClave','nuevaClaveRepeticion'];
 			restablecer();
-			var validado = true;			
+			var validado = true;
 			for(var i=0; i < campo.length; i++){
 			    var nombreRol = document.getElementById(campo[i]);
 			    var nombreRolError = document.getElementById(campo[i]+'Error');
@@ -29,11 +29,19 @@
 					validado = false;
 				}
 			}
-			
+
+    		var pass1 = document.getElementById('nuevaClave').value;
+	    	var pass2 = document.getElementById('nuevaClaveRepeticion').value;
+	    	if(pass1.length > 0 && pass1 != pass2){
+	    		document.getElementById('nuevaClaveError').innerHTML = "Claves no iguales";
+	    		document.getElementById('nuevaClave').style.borderColor="red";
+	    		document.getElementById('nuevaClave').style.borderColor="red";
+	    		validado = false;
+	    	}
+
 			if(validado){
 				return true;
 			} else {
-				document.getElementById('hayError').innerHTML = "Por favor rellenar todos los campos";
 				return false;
 			}
 		}
@@ -75,18 +83,19 @@
 				</ul>
 			</div>
 		</nav>
+
+		<div th:if="${antiguaDistinta != null}" class="alert alert-danger" role="alert">Antigua contraseña no válida</div>
+		<div th:if="${claveModificada != null}" class="alert alert-success" role="alert">Contraseña modificada correctamente</div>
+
+		<form action="#" th:action="@{/usuario/actualizarClaveUsuario}" th:object="${claveUsuarioModel}" method="post" onsubmit="return validar()">
 		
-		<form action="#" th:action="@{/usuario/actualizarUsuario}" th:object="${usuario}" method="post" onsubmit="return validar()">
-		
-			<input type="hidden" name="username" th:value="${usuario.username}"/>
-			<input type="hidden" name="password" th:value="${usuario.password}"/>
-			<input type="hidden" name="enabled" th:value="${usuario.enabled}"/>
+			<input type="hidden" name="username" th:value="${claveUsuarioModel.username}"/>
 
 			<div class="row">
 			    <div class="col-xs-6 mb-3">
-					<label for="name">Nombre:</label>
-					<input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Nombre"/>
-					<span id="nameError" name="errorSpan"></span>
+					<label for="antiguaClave">Antigua contraseña:</label>
+					<input type="password" th:field="*{antiguaClave}" id="antiguaClave" class="form-control" placeholder="Antigua contraseña"/>
+					<span id="antiguaClaveError" name="errorSpan"></span>
 				</div>
 				
 			    <div class="col-xs-6 mb-3">
@@ -95,9 +104,9 @@
 
 			<div class="row">
 				<div class="col-xs-6 mb-3">
-					<label for="lastname">Primer apellido:</label>
-					<input type="text" th:field="*{lastname}" id="lastname" class="form-control" placeholder="Primer apellido"/>
-					<span id="lastnameError" name="errorSpan"></span>
+					<label for="nuevaClave">Nueva contraseña:</label>
+					<input type="password" th:field="*{nuevaClave}" id="nuevaClave" class="form-control" placeholder="Nueva contraseña"/>
+					<span id="nuevaClaveError" name="errorSpan"></span>
 				</div>
 
 				<div class="col-xs-6 mb-3">
@@ -106,57 +115,37 @@
 
 			<div class="row">
 				<div class="col-xs-6 mb-3">
-					<label for="secondLastname">Segundo apellido:</label>
-					<input type="text" th:field="*{secondLastname}" id="secondLastname" class="form-control" placeholder="Segundo apellido"/>
-					<span id="secondLastnameError" name="errorSpan"></span>
+					<label for="nuevaClaveRepeticion">Repetir nueva contraseña:</label>
+					<input type="password" th:field="*{nuevaClaveRepeticion}" id="nuevaClaveRepeticion" class="form-control" placeholder="Repetir nueva contraseña"/>
+					<span id="nuevaClaveRepeticionError" name="errorSpan"></span>
 				</div>
 
 				<div class="col-xs-6 mb-3">
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-2 mb-3">
-					<button class="btn btn-success" type="submit">Actualizar</button>
-				</div>
-
-				<div class="col-xs-2 mb-3">
-					<a class="btn btn-warning" href="#" th:href="@{/usuario/formularioCambioClave}">Cambiar Contraseña</a>
-				</div>
-
-				<div class="col-xs-8 mb-3">
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-xs-6 mb-3">
-					<span id="hayError" name="errorSpan" style="color:red"></span>
-				</div>
-
-				<div class="col-xs-6 mb-3">
-				</div>
-			</div>
-
-
-
+			
+		    <button class="btn btn-primary" type="submit">Actualizar</button>
+		    <span id="hayError" name="errorSpan" style="color:red"></span>
+			
 		</form>
-		
+
 	</div>
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
+			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
 	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
+			src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
 </body>
 </html>

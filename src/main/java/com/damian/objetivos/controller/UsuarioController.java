@@ -1,5 +1,6 @@
 package com.damian.objetivos.controller;
 
+import com.damian.objetivos.model.ClaveUsuarioModel;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,9 +44,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ModelAndView formularioUsuario() {
 		ModelAndView modelAndView = new ModelAndView("formularioUsuario");
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(user.getUsername());
-		modelAndView.addObject("usuario", usuario);
+		cargarUsuarioCompleto(modelAndView);
 		modelAndView.addObject("categorias", categoriaService.listAll());
 		LoggerMapper.log(Level.INFO, "formularioUsuario", modelAndView, getClass());
 		return modelAndView;
@@ -58,12 +57,53 @@ public class UsuarioController {
 		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
 		return "redirect:/entrada/listaEntradas";
 	}
+
+	@GetMapping("/formularioCambioClave")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public ModelAndView formularioCambioClave() {
+		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
+		com.damian.objetivos.entity.User usuario = cargarUsuarioCompleto(modelAndView);
+		modelAndView.addObject("categorias", categoriaService.listAll());
+		ClaveUsuarioModel claveUsuarioModel = new ClaveUsuarioModel();
+		claveUsuarioModel.setUsername(usuario.getUsername());
+		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
+		LoggerMapper.log(Level.INFO, "formularioCambioClave", modelAndView, getClass());
+		return modelAndView;
+	}
+
+	@PostMapping("/actualizarClaveUsuario")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	public ModelAndView actualizarClaveUsuario(@ModelAttribute("claveUsuarioModel") ClaveUsuarioModel claveUsuarioModel ) {
+		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
+		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(claveUsuarioModel.getUsername());
+		if (userService.comparePassword(claveUsuarioModel.getAntiguaClave(), usuario.getPassword())) {
+			usuario.setPassword(userService.generatePassword(claveUsuarioModel.getNuevaClave()));
+			usuario = userService.addOrUpdate(usuario);
+			modelAndView.addObject("claveModificada", "claveModificada");
+			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña actualizada", getClass());
+		} else {
+			modelAndView.addObject("antiguaDistinta", "antiguaDistinta");
+			LoggerMapper.log(Level.INFO, "actualizarUsuario", "Contraseña antigua distinta", getClass());
+		}
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.addObject("categorias", categoriaService.listAll());
+		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
+		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
+		return modelAndView;
+	}
 	
 	private void cargarUsuario(ModelAndView modelAndView) {		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(user.getUsername());
 		modelAndView.addObject("username", usuario.getName());
 		
+	}
+
+	private com.damian.objetivos.entity.User cargarUsuarioCompleto(ModelAndView modelAndView) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(user.getUsername());
+		modelAndView.addObject("usuario", usuario);
+		return usuario;
 	}
 
 }
