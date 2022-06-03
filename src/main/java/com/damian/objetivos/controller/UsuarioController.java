@@ -42,8 +42,8 @@ public class UsuarioController {
 	
 	@GetMapping("/formularioUsuario")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public ModelAndView formularioUsuario() {
-		ModelAndView modelAndView = new ModelAndView("formularioUsuario");
+	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
+		modelAndView.setViewName("formularioUsuario");
 		cargarUsuarioCompleto(modelAndView);
 		modelAndView.addObject("categorias", categoriaService.listAll());
 		LoggerMapper.log(Level.INFO, "formularioUsuario", modelAndView, getClass());
@@ -52,10 +52,17 @@ public class UsuarioController {
 	
 	@PostMapping("/actualizarUsuario")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-	public String actualizarUsuario(@ModelAttribute("user") com.damian.objetivos.entity.User usuario) {
-		usuario = userService.addOrUpdate(usuario);
+	public ModelAndView actualizarUsuario(@ModelAttribute("user") com.damian.objetivos.entity.User usuario) {
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			usuario = userService.addOrUpdate(usuario);
+			modelAndView.addObject("actualizacionCorrecta", "actualizacionCorrecta");
+		} catch (Exception e) {
+			modelAndView.addObject("actualizacionError", "actualizacionError");
+			LoggerMapper.log(Level.ERROR, "actualizarUsuario", e.getMessage(), getClass());
+		}
 		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
-		return "redirect:/entrada/listaEntradas";
+		return formularioUsuario(modelAndView);
 	}
 
 	@GetMapping("/formularioCambioClave")

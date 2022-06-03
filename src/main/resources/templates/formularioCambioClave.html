@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -124,10 +124,28 @@
 				</div>
 			</div>
 
-			
-		    <button class="btn btn-primary" type="submit">Actualizar</button>
-		    <span id="hayError" name="errorSpan" style="color:red"></span>
-			
+			<div class="row">
+				<div class="col-xs-2 mb-3">
+					<button class="btn btn-primary" type="submit">Actualizar</button>
+				</div>
+
+				<div class="col-xs-2 mb-3">
+					<a class="btn btn-default" href="#" th:href="@{/usuario/formularioUsuario}">Volver</a>
+				</div>
+
+				<div class="col-xs-8 mb-3">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6 mb-3">
+					<span id="hayError" name="errorSpan" style="color:red"></span>
+				</div>
+
+				<div class="col-xs-6 mb-3">
+				</div>
+			</div>
+
 		</form>
 
 	</div>
