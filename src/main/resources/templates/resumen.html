@@ -42,8 +42,41 @@
 					</li>
 				</ul>
 			</div>
-		</nav>		
-		
+		</nav>
+
+
+
+		<div class="row">
+			<div class="col-xs-1">
+			</div>
+
+			<div class="col-xs-10">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>Título</th>
+						<th>Objetivo</th>
+						<th>Hitos</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="objetivo : ${tablaObjetivos}">
+						<td>
+							<a href="#" th:href="@{/entrada/entradasSubcategoria?idSubcategoria=__${objetivo.idSubcategoria}__}">
+								<span th:text="${objetivo.titulo}"></span>
+							</a>
+						</td>
+						<td><span th:text="${objetivo.objetivo}"></span></td>
+						<td><span th:text="${objetivo.hito}"></span></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-xs-1">
+			</div>
+		</div>
+
 		<div th:each="entrada : ${entradas}" class="panel panel-primary">
 			<div class="panel-heading">
 				<span th:text="${#calendars.format(entrada.fecha,'dd/MM/yyyy')}"></span>

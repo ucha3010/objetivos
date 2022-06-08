@@ -34,6 +34,11 @@ public class EntradaServiceImpl implements EntradaService{
 	}
 
 	@Override
+	public List<EntradaModel> listAllOrdered() {
+		return fillEntradaModel(entradaJpaRepository.findAllByOrderByCategoriaAscSubcategoriaAsc());
+	}
+
+	@Override
 	public EntradaModel addOrUpdate(EntradaModel entrada) {
 		return entradaConverter.entity2Model(entradaJpaRepository.save(entradaConverter.model2Entity(entrada)));
 	}

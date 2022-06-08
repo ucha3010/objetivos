@@ -7,6 +7,8 @@ import com.damian.objetivos.model.EntradaModel;
 public interface EntradaService {
 	
 	public abstract List<EntradaModel> listAll();
+
+	public abstract List<EntradaModel> listAllOrdered();
 	
 	public abstract EntradaModel addOrUpdate(EntradaModel entrada);
 	

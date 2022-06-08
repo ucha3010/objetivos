@@ -28,7 +28,7 @@ public class SubcategoriaServiceImpl implements SubcategoriaService{
 
 	@Override
 	public List<SubcategoriaModel> listAll() {
-		return fillSubcategoriaModel(subcategoriaJpaRepository.findAll());
+		return fillSubcategoriaModel(subcategoriaJpaRepository.findAllByOrderByIdCategoriaAscIdAsc());
 	}
 
 	@Override

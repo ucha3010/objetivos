@@ -15,4 +15,6 @@ public interface SubcategoriaJpaRepository extends JpaRepository<Subcategoria, S
 	
 	public abstract List<Subcategoria> findByIdCategoria(int idCategoria);
 
+	public abstract List<Subcategoria> findAllByOrderByIdCategoriaAscIdAsc();
+
 }

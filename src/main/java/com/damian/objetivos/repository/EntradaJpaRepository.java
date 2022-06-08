@@ -13,4 +13,6 @@ public interface EntradaJpaRepository extends JpaRepository<Entrada, Serializabl
 	
 	public abstract List<Entrada> findBySubcategoriaOrderByFecha(int subcategoria);
 
+	public abstract List<Entrada> findAllByOrderByCategoriaAscSubcategoriaAsc();
+
 }

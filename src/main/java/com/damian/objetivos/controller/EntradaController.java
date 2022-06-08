@@ -1,5 +1,6 @@
 package com.damian.objetivos.controller;
 
+import com.damian.objetivos.model.ObjetivoHitoModel;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,10 @@ import com.damian.objetivos.service.CategoriaService;
 import com.damian.objetivos.service.EntradaService;
 import com.damian.objetivos.service.SubcategoriaService;
 import com.damian.objetivos.util.LoggerMapper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/entrada")
@@ -40,8 +45,10 @@ public class EntradaController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	public ModelAndView listaEntradas() {
 		ModelAndView modelAndView = new ModelAndView("resumen");
-		modelAndView.addObject("entradas", entradaService.listAll());
+		List<EntradaModel> entradas = entradaService.listAllOrdered();
+		modelAndView.addObject("entradas", entradas);
 		modelAndView.addObject("categorias", categoriaService.listAll());
+		modelAndView.addObject("tablaObjetivos", rellenarTablaObjetivos(entradas));
 		cargarUsuario(modelAndView);
 		LoggerMapper.log(Level.INFO, "listaEntradas", modelAndView, getClass());
 		return modelAndView;
@@ -88,7 +95,25 @@ public class EntradaController {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		com.damian.objetivos.entity.User usuario = userRepository.findByUsername(user.getUsername());
 		modelAndView.addObject("username", usuario.getName());
-		
+	}
+
+	private List<ObjetivoHitoModel> rellenarTablaObjetivos(List<EntradaModel> entradas) {
+		List<SubcategoriaModel> subcategorias = subcategoriaService.listAll();
+		List<ObjetivoHitoModel> objetivoHitoModels = new ArrayList<>();
+		ObjetivoHitoModel objetivoHitoModel;
+		for(SubcategoriaModel subcategoria: subcategorias) {
+			objetivoHitoModel = new ObjetivoHitoModel();
+			objetivoHitoModel.setIdSubcategoria(subcategoria.getId());
+			objetivoHitoModel.setTitulo(subcategoria.getName());
+			objetivoHitoModel.setObjetivo(subcategoria.getDescripcion());
+			for(EntradaModel entrada: entradas) {
+				if(subcategoria.getId() == entrada.getSubcategoria().getId()) {
+					objetivoHitoModel.setHito(objetivoHitoModel.getHito()+1);
+				}
+			}
+			objetivoHitoModels.add(objetivoHitoModel);
+		}
+		return objetivoHitoModels;
 	}
 
 }

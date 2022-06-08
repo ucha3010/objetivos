@@ -42,9 +42,11 @@
 				</ul>
 			</div>
 		</nav>	
-		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" href="#" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__}" role="button">Agregar entrada</a>	
-		
-		<h3><span th:text="${subcategoriaElegida.descripcion}"></span></h3>
+		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" href="#" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__}" role="button">Agregar entrada</a>
+
+		<div class="alert alert-info" role="alert">
+			<h3><span th:text="${subcategoriaElegida.descripcion}"></span></h3>
+		</div>
 		
 		<div th:each="entrada : ${entradas}" class="panel panel-primary">
 			<div class="panel-heading">
