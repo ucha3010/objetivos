@@ -35,6 +35,15 @@ public class UserService implements UserDetailsService {
 		return userRepository.save(usuario);
 	}
 
+	public boolean delete(String username) {
+		try {
+			userRepository.delete(userRepository.findByUsername(username));
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
 	public boolean comparePassword(String newPass, String oldPass) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.matches(newPass, oldPass);
@@ -43,6 +52,10 @@ public class UserService implements UserDetailsService {
 	public String generatePassword(String newPass) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.encode(newPass);
+	}
+
+	public List<com.damian.objetivos.entity.User> findAll() {
+		return userRepository.findAll();
 	}
 	
 	private User buildUser(com.damian.objetivos.entity.User user, List<GrantedAuthority> authorities) {
@@ -56,7 +69,7 @@ public class UserService implements UserDetailsService {
 		for (UserRole userRole: userRoles) {
 			grantedAuthorities.add(new SimpleGrantedAuthority(userRole.getRole()));
 		}
-		return new ArrayList<GrantedAuthority>(grantedAuthorities);
+		return new ArrayList<>(grantedAuthorities);
 	}
 
 }

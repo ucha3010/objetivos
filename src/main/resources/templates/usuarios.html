@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -7,13 +7,22 @@
 	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<!--     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!--	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
 
 <link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
+	<script type="text/javascript">
+		function confirmDelete(username){
+			if(confirm("¿Seguro que desea eliminar a " + username + "?")){
+				var url = "eliminarUsuario?username=" + username;
+				location.href=url;
+				return true;
+			}
+			return false;
+		}
+	</script>
 
-<title>Resumen</title>
+<title>Usuarios</title>
 </head>
 <body>
 	<div class="container">
@@ -43,55 +52,30 @@
 				</ul>
 			</div>
 		</nav>
-		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" href="#" th:href="@{/usuario/listaUsuarios}" role="button">Usuarios</a>
 
 
-
-		<div class="row">
-			<div class="col-xs-1">
-			</div>
-
-			<div class="col-xs-10">
-				<table class="table table-striped">
-					<thead>
-					<tr>
-						<th>Título</th>
-						<th>Objetivo</th>
-						<th>Hitos</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr th:each="objetivo : ${tablaObjetivos}">
-						<td>
-							<a href="#" th:href="@{/entrada/entradasSubcategoria?idSubcategoria=__${objetivo.idSubcategoria}__}">
-								<span th:text="${objetivo.titulo}"></span>
-							</a>
-						</td>
-						<td><span th:text="${objetivo.objetivo}"></span></td>
-						<td><span th:text="${objetivo.hito}"></span></td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<div class="col-xs-1">
-			</div>
-		</div>
-
-		<div th:each="entrada : ${entradas}" class="panel panel-primary">
-			<div class="panel-heading">
-				<span th:text="${#calendars.format(entrada.fecha,'dd/MM/yyyy')}"></span>
-				<span class="pull-right">
-					<span th:text="${entrada.categoria.name}"></span>
-					<span class="glyphicon glyphicon-chevron-right"></span>
-					<span th:text="${entrada.subcategoria.name}"></span>
-				</span>
-			</div>
-			<div class="panel-body"><span th:text="${entrada.detalle}"></span></div>
-		</div>
-
-		
-		
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>Username</th>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Segundo Apellido</th>
+				<th>Habilitado</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="usuario : ${usuarios}">
+				<td><span th:text="${usuario.username}"></span></td>
+				<td><span th:text="${usuario.name}"></span></td>
+				<td><span th:text="${usuario.lastname}"></span></td>
+				<td><span th:text="${usuario.secondLastname}"></span></td>
+				<td><span th:text="${usuario.enabled}"></span></td>
+				<td><a th:attr="onclick=|return confirmDelete('${usuario.username}')|"><span class="glyphicon glyphicon-trash"></span></a></td>
+			</tr>
+			</tbody>
+		</table>
 
 	</div>
 

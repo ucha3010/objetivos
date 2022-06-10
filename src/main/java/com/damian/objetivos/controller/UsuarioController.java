@@ -1,6 +1,7 @@
 package com.damian.objetivos.controller;
 
 import com.damian.objetivos.model.ClaveUsuarioModel;
+import com.damian.objetivos.model.EntradaModel;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,8 @@ import com.damian.objetivos.repository.UserRepository;
 import com.damian.objetivos.service.CategoriaService;
 import com.damian.objetivos.service.impl.UserService;
 import com.damian.objetivos.util.LoggerMapper;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
@@ -35,6 +38,8 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ModelAndView listaUsuarios() {//TODO sin hacer
 		ModelAndView modelAndView = new ModelAndView("usuarios");
+		modelAndView.addObject("categorias", categoriaService.listAll());
+		modelAndView.addObject("usuarios", userService.findAll());
 		cargarUsuario(modelAndView);
 		LoggerMapper.log(Level.INFO, "listaUsuarios", modelAndView, getClass());
 		return modelAndView;
@@ -97,6 +102,14 @@ public class UsuarioController {
 		modelAndView.addObject("claveUsuarioModel", claveUsuarioModel);
 		LoggerMapper.log(Level.INFO, "actualizarUsuario", usuario, getClass());
 		return modelAndView;
+	}
+
+	@GetMapping("/eliminarUsuario")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView eliminarUsuario(@ModelAttribute("username") String username) {
+		boolean eliminado = userService.delete(username);
+		LoggerMapper.log(Level.INFO, "eliminarUsuario", eliminado, getClass());
+		return listaUsuarios();
 	}
 	
 	private void cargarUsuario(ModelAndView modelAndView) {		
