@@ -53,6 +53,11 @@
 			</div>
 		</nav>
 
+		<div th:if="${eliminacionError != null}" class="alert alert-danger" role="alert">Hubo problemas al eliminar el usuario</div>
+		<div th:if="${eliminacionCorrecta != null}" class="alert alert-success" role="alert">Usuario eliminado correctamente</div>
+		<div th:if="${rolesModificados != null}" class="alert alert-success" role="alert">Roles modificados correctamente</div>
+
+		<a class="btn btn-primary" href="#" th:href="@{/usuario/formularioUsuarioAltaModif}" role="button">Alta Usuario</a>
 
 		<table class="table table-striped">
 			<thead>
@@ -63,6 +68,8 @@
 				<th>Segundo Apellido</th>
 				<th>Habilitado</th>
 				<th></th>
+				<th></th>
+				<th></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -72,6 +79,8 @@
 				<td><span th:text="${usuario.lastname}"></span></td>
 				<td><span th:text="${usuario.secondLastname}"></span></td>
 				<td><span th:text="${usuario.enabled}"></span></td>
+				<td><a href="#" th:href="@{/usuario/formularioUsuarioRoles?username=__${usuario.username}__}"><span class="glyphicon glyphicon-wrench"></span></a></td>
+				<td><a href="#" th:href="@{/usuario/formularioUsuarioAltaModif?username=__${usuario.username}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
 				<td><a th:attr="onclick=|return confirmDelete('${usuario.username}')|"><span class="glyphicon glyphicon-trash"></span></a></td>
 			</tr>
 			</tbody>

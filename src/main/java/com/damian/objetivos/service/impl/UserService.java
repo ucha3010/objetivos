@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.damian.objetivos.repository.UserRoleRepository;
+import com.damian.objetivos.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +26,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		com.damian.objetivos.entity.User user = userRepository.findByUsername(username);
@@ -37,7 +42,13 @@ public class UserService implements UserDetailsService {
 
 	public boolean delete(String username) {
 		try {
-			userRepository.delete(userRepository.findByUsername(username));
+			com.damian.objetivos.entity.User user = userRepository.findByUsername(username);
+			Set<UserRole> userRoles = userRoleRepository.findByUser(user);
+			for(UserRole userRole: userRoles) {
+				userRoleRepository.delete(userRole);
+			}
+			user.setUserRole(null);
+			userRepository.delete(user);
 		} catch (Exception e) {
 			return false;
 		}
@@ -56,6 +67,10 @@ public class UserService implements UserDetailsService {
 
 	public List<com.damian.objetivos.entity.User> findAll() {
 		return userRepository.findAll();
+	}
+
+	public com.damian.objetivos.entity.User findByUsername(String username) {
+		return userRepository.findByUsername(username);
 	}
 	
 	private User buildUser(com.damian.objetivos.entity.User user, List<GrantedAuthority> authorities) {
