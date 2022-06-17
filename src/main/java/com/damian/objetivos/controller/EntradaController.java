@@ -7,10 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.damian.objetivos.model.EntradaModel;
@@ -56,11 +53,15 @@ public class EntradaController {
 	
 	@GetMapping("/formularioEntrada")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ModelAndView formularioEntrada(@ModelAttribute("idSubcategoria") int idSubcategoria) {
-		ModelAndView modelAndView = new ModelAndView("formularioEntrada");
+	public ModelAndView formularioEntrada(ModelAndView modelAndView, @ModelAttribute("idSubcategoria") int idSubcategoria,
+										  @ModelAttribute("idEntrada") int idEntrada) {
+		modelAndView.setViewName("formularioEntrada");
 		modelAndView.addObject("subcategoriaId", idSubcategoria);
 		SubcategoriaModel subcategoria = new SubcategoriaModel();
 		EntradaModel entrada = new EntradaModel();
+		if(idEntrada != 0) {
+			entrada = entradaService.findById(idEntrada);
+		}
 		entrada.setSubcategoria(subcategoria);
 		modelAndView.addObject("entrada", entrada);
 		modelAndView.addObject("categorias", categoriaService.listAll());
@@ -72,17 +73,31 @@ public class EntradaController {
 	
 	@PostMapping("/agregarEntrada")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String agregarEntrada(@ModelAttribute("entrada") EntradaModel entrada) {
+	public ModelAndView agregarEntrada(@ModelAttribute("entrada") EntradaModel entrada) {
 		entradaService.fillCategoriaId(entrada);
 		EntradaModel entradaExit = entradaService.addOrUpdate(entrada);
 		LoggerMapper.log(Level.INFO, "agregarEntrada", entradaExit, getClass());
-		return "redirect:/entrada/listaEntradas";
+		return entradasPorSubcategoria(new ModelAndView(), entrada.getSubcategoria().getId());
+	}
+
+	@GetMapping("/eliminarEntrada")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView eliminarEntrada(@ModelAttribute("idEntrada") int idEntrada) {
+		ModelAndView modelAndView = new ModelAndView();
+		EntradaModel entrada = entradaService.findById(idEntrada);
+		if (entradaService.remove(idEntrada) == 1) {
+			modelAndView.addObject("eliminacionCorrecta","actualizacionCorrecta");
+		} else {
+			modelAndView.addObject("eliminacionError","eliminacionError");
+		}
+		LoggerMapper.log(Level.INFO, "eliminarEntrada", modelAndView, getClass());
+		return entradasPorSubcategoria(modelAndView, entrada.getSubcategoria().getId());
 	}
 	
 	@GetMapping("/entradasSubcategoria")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-	public ModelAndView entradasPorSubcategoria(@ModelAttribute("idSubcategoria") int idSubcategoria) {
-		ModelAndView modelAndView = new ModelAndView("subcategoria");
+	public ModelAndView entradasPorSubcategoria(ModelAndView modelAndView, @ModelAttribute("idSubcategoria") int idSubcategoria) {
+		modelAndView.setViewName("subcategoria");
 		modelAndView.addObject("entradas", entradaService.listBySubcategoria(idSubcategoria));
 		modelAndView.addObject("categorias", categoriaService.listAll());
 		modelAndView.addObject("subcategoriaElegida", subcategoriaService.findById(idSubcategoria));

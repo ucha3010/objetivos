@@ -82,6 +82,7 @@
 		<form action="#" th:action="@{/entrada/agregarEntrada}" th:object="${entrada}" method="post" onsubmit="return validar()">
 		
 			<input type="hidden" name="subcategoria.id" th:value="${subcategoriaId}"/>
+			<input type="hidden" name="id" th:value="*{id}"/>
 		
 			<div class="row">
 			    <div class="col-xs-6 mb-3">

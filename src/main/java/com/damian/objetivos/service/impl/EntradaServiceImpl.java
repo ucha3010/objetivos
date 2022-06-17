@@ -39,6 +39,11 @@ public class EntradaServiceImpl implements EntradaService{
 	}
 
 	@Override
+	public EntradaModel findById(int id) {
+		return entradaConverter.entity2Model(entradaJpaRepository.getById(id));
+	}
+
+	@Override
 	public EntradaModel addOrUpdate(EntradaModel entrada) {
 		return entradaConverter.entity2Model(entradaJpaRepository.save(entradaConverter.model2Entity(entrada)));
 	}

@@ -51,7 +51,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/formularioUsuario")
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView formularioUsuario(ModelAndView modelAndView) {
 		modelAndView.setViewName("formularioUsuario");
 		cargarUsuarioCompleto(modelAndView);
@@ -61,13 +61,13 @@ public class UsuarioController {
 	}
 	
 	@PostMapping("/actualizarUsuario")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarUsuario(@ModelAttribute("user") com.damian.objetivos.entity.User usuario) {
 		return formularioUsuario(addOrUpdateUsuario(usuario,"actualizarUsuario"));
 	}
 
 	@GetMapping("/formularioCambioClave")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView formularioCambioClave() {
 		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
 		com.damian.objetivos.entity.User usuario = cargarUsuarioCompleto(modelAndView);
@@ -80,7 +80,7 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/actualizarClaveUsuario")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView actualizarClaveUsuario(@ModelAttribute("claveUsuarioModel") ClaveUsuarioModel claveUsuarioModel ) {
 		ModelAndView modelAndView = new ModelAndView("formularioCambioClave");
 		com.damian.objetivos.entity.User usuario = userService.findByUsername(claveUsuarioModel.getUsername());
