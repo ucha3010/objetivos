@@ -62,8 +62,8 @@
 		<div th:each="entrada : ${entradas}" class="panel panel-primary">
 			<div class="panel-heading">
 				<span th:text="${#calendars.format(entrada.fecha,'dd/MM/yyyy')}"></span>
-				<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__&idEntrada=__${entrada.id}__}"><span class="glyphicon glyphicon-pencil"></span></a>
-				<a sec:authorize="hasRole('ROLE_ADMIN')" th:attr="onclick=|return confirmDelete('${entrada.id}')|"><span class="glyphicon glyphicon-trash"></span></a>
+				<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__&idEntrada=__${entrada.id}__}" class="badge"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a sec:authorize="hasRole('ROLE_ADMIN')" th:attr="onclick=|return confirmDelete('${entrada.id}')|" class="badge"><span class="glyphicon glyphicon-trash"></span></a>
 			</div>
 			<div class="panel-body"><span th:text="${entrada.detalle}"></span></div>
 		</div>
