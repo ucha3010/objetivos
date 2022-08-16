@@ -184,6 +184,19 @@ public class UsuarioController {
 		return listaUsuarios(modelAndView);
 	}
 
+	@GetMapping("/resetearClaveUsuario")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ModelAndView resetearClaveUsuario(@ModelAttribute("username") String username) {
+		ModelAndView modelAndView = new ModelAndView();
+		com.damian.objetivos.entity.User usuario = userService.findByUsername(username);
+		usuario.setPassword(userService.generatePassword(username));
+		usuario = userService.addOrUpdate(usuario);
+		String mensaje = "Nueva clave de " + usuario.getName() + " " + usuario.getLastname() + ": " + username;
+		modelAndView.addObject("reseteoClaveCorrecto",mensaje);
+		LoggerMapper.log(Level.INFO, "resetearClaveUsuario", modelAndView, getClass());
+		return listaUsuarios(modelAndView);
+	}
+
 	private ModelAndView addOrUpdateUsuario(com.damian.objetivos.entity.User usuario, String metodo) {
 		ModelAndView modelAndView = new ModelAndView();
 		try {

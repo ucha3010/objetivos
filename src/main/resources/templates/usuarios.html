@@ -56,6 +56,7 @@
 		<div th:if="${eliminacionError != null}" class="alert alert-danger" role="alert">Hubo problemas al eliminar el usuario</div>
 		<div th:if="${eliminacionCorrecta != null}" class="alert alert-success" role="alert">Usuario eliminado correctamente</div>
 		<div th:if="${rolesModificados != null}" class="alert alert-success" role="alert">Roles modificados correctamente</div>
+		<div th:if="${reseteoClaveCorrecto != null}" class="alert alert-success" role="alert"><span th:text="${reseteoClaveCorrecto}"></span></div>
 
 		<a class="btn btn-primary" href="#" th:href="@{/usuario/formularioUsuarioAltaModif}" role="button">Alta Usuario</a>
 
@@ -70,6 +71,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
+				<th></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -79,8 +81,9 @@
 				<td><span th:text="${usuario.lastname}"></span></td>
 				<td><span th:text="${usuario.secondLastname}"></span></td>
 				<td><span th:text="${usuario.enabled}"></span></td>
-				<td><a href="#" th:href="@{/usuario/formularioUsuarioRoles?username=__${usuario.username}__}"><span class="glyphicon glyphicon-wrench"></span></a></td>
-				<td><a href="#" th:href="@{/usuario/formularioUsuarioAltaModif?username=__${usuario.username}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+				<td><a href="#" th:href="@{/usuario/formularioUsuarioRoles?username=__${usuario.username}__}"><span title="Roles" class="glyphicon glyphicon-wrench"></span></a></td>
+				<td><a href="#" th:href="@{/usuario/formularioUsuarioAltaModif?username=__${usuario.username}__}"><span title="Modificar" class="glyphicon glyphicon-pencil"></span></a></td>
+				<td><a href="#" th:href="@{/usuario/resetearClaveUsuario?username=__${usuario.username}__}"><span title="Resetear contraseña" class="glyphicon glyphicon-repeat"></span></a></td>
 				<td><a th:attr="onclick=|return confirmDelete('${usuario.username}')|"><span class="glyphicon glyphicon-trash"></span></a></td>
 			</tr>
 			</tbody>
