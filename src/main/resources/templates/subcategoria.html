@@ -55,10 +55,19 @@
 		</nav>	
 		<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" href="#" th:href="@{/entrada/formularioEntrada?idSubcategoria=__${subcategoriaElegida.id}__&idEntrada=0}" role="button">Agregar entrada</a>
 
+
+		<nav class="d-flex">
+			<h5 class="mb-0">
+				<span th:text="${subcategoriaElegida.categoria.name}" class="text-reset"></span>
+				<span>/</span>
+				<span th:text="${subcategoriaElegida.name}" class="text-reset"></span>
+			</h5>
+		</nav>
+
 		<div class="alert alert-info" role="alert">
 			<h3><span th:text="${subcategoriaElegida.descripcion}"></span></h3>
 		</div>
-		
+
 		<div th:each="entrada : ${entradas}" class="panel panel-primary">
 			<div class="panel-heading">
 				<span th:text="${#calendars.format(entrada.fecha,'dd/MM/yyyy')}"></span>
