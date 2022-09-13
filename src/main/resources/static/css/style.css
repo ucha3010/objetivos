@@ -13,6 +13,26 @@ h1 {
 	padding-left: 1%;
 }
 
+.mb-1 {
+    margin-bottom: 10px;
+}
+
 .mb-3 {
 	margin-bottom: 30px;
+}
+
+.margenArribaAbajo3Porc {
+    margin: 3% 0%; /*arriba y abajo, a los costados*/
+}
+
+.margenAbajo2Porc{
+    margin: 0% 0% 2% 0%; /*arriba, derecha, abajo, izquierda*/
+}
+
+.anchoMinimo50 {
+    min-width: 50%;
+}
+
+.anchoMinimo40 {
+    min-width: 40%;
 }
